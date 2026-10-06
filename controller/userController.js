@@ -1,7 +1,7 @@
 //dbconnection 
 const dbconnection = require("../db/dbconfig");
 const bcrypt = require("bcrypt");
-const {statusCodes} =require("http-status-codes")
+const statusCodes = require("../constants/statusCodes");
 // REGISTER USER
 async function register(req, res) {
   const {
@@ -55,7 +55,13 @@ async function register(req, res) {
 // LOGIN USER
 
 async function login(req, res) {
-  res.send("login");
+  const { email, password} =req.body;
+  if(!email || !password){
+    return res.status(statusCodes.BAD_REQUEST).json({
+      msg: "please enter all required fileds"
+    });
+  }
+
 }
 
 // CHECK USER
