@@ -2,6 +2,7 @@
 const dbconnection = require("../db/dbconfig");
 const bcrypt = require("bcrypt");
 const statusCodes = require("../constants/statusCodes");
+const jwt =require("jsonwebtoken");
 // REGISTER USER
 async function register(req, res) {
   const {
@@ -55,27 +56,31 @@ async function register(req, res) {
 // LOGIN USER
 
 async function login(req, res) {
-  const { email, password} =req.body;
-  if(!email || !password){
+  const { email, PASSWORD} =req.body;
+  if(!email || !PASSWORD){
     return res.status(statusCodes.BAD_REQUEST).json({
       msg: "please enter all required fileds"
     });
   }
 
   try{
-    const[user] = await dbconnection.query("select username,userid,password from users where email = ?",[email])
-    if(user.length ===0){
+    const[user] = await dbconnection.query("select username,userid,PASSWORD from users where email = ?",[email])
+    if(user.length == 0){
       return res.status(statusCodes.BAD_REQUEST).json({
         msg: "Invalid credential"
       });
     }
     //compare password
-    const isMatch = await bcrypt.compare(password,user[0].password);
+    const isMatch = await bcrypt.compare(PASSWORD,user[0].PASSWORD);
     if(!isMatch){
       return res.status(statusCodes.BAD_REQUEST).json({
         msg: "invalid credential"});
     }
-    return res.json({user})
+    const token = jwt.sign({ userId: user[0].userid }, process.env.JWT_SECRET, { expiresIn: "1d" });
+    return res.status(statusCodes.OK).json({
+  msg: "user login successfully",
+  token
+});
   }catch(err){
     console.error("login error:", err);
     return res.status(statusCodes.INTERNAL_SERVER_ERROR).json({
