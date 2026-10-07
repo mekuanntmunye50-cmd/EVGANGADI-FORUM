@@ -62,6 +62,26 @@ async function login(req, res) {
     });
   }
 
+  try{
+    const[user] = await dbconnection.query("select username,userid,password from users where email = ?",[email])
+    if(user.length ===0){
+      return res.status(statusCodes.BAD_REQUEST).json({
+        msg: "Invalid credential"
+      });
+    }
+    //compare password
+    const isMatch = await bcrypt.compare(password,user[0].password);
+    if(!isMatch){
+      return res.status(statusCodes.BAD_REQUEST).json({
+        msg: "invalid credential"});
+    }
+    return res.json({user})
+  }catch(err){
+    console.error("login error:", err);
+    return res.status(statusCodes.INTERNAL_SERVER_ERROR).json({
+      msg: "somthing went wrong pleasetray again later"
+    })
+  }
 }
 
 // CHECK USER
