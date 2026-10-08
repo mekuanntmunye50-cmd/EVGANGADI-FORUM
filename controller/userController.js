@@ -43,7 +43,6 @@ async function register(req, res) {
     return res.status(statusCodes.CREATED).json({
       msg: "User registered successfully!"
     });
-
   } catch (err) {
     console.error("Error registering user:", err);
 
