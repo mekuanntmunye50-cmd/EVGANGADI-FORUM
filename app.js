@@ -2,16 +2,15 @@ require("dotenv").config();
 const express = require("express");
 
 const app = express();
-const port = 5500;
+const port = process.env.PORT || 5500;
 
 // Database connection
 const dbconnections = require("./db/dbconfig");
 
 // User routes middleware
 const userRoutes = require("./routes/userRoute");
-//json middleware to extract data
-app.use(express.json());
 
+app.use(express.json());
 app.use("/api/users", userRoutes);
 
 // Question routes middleware
@@ -22,17 +21,17 @@ app.use("/api/users", userRoutes);
 
 async function start() {
   try {
-    // Test database connection
-    const result = await dbconnections.execute("SELECT 1");
-
+    await dbconnections.execute("SELECT 1");
     console.log("Database connection established successfully!");
 
     app.listen(port, () => {
       console.log(`Listening on port ${port}`);
     });
-
   } catch (err) {
-    console.log("Database connection failed:", err.message);
+    console.error("Database connection failed!");
+    console.error(err.message || err);
+    console.error("Check that MySQL is running and that DB credentials in .env are correct.");
+    process.exit(1);
   }
 }
 

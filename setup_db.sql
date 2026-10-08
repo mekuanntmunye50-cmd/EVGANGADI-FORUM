@@ -1,0 +1,7 @@
+CREATE DATABASE IF NOT EXISTS evangadi_db;
+CREATE USER IF NOT EXISTS 'yared'@'localhost' IDENTIFIED BY '123456';
+CREATE USER IF NOT EXISTS 'yared'@'127.0.0.1' IDENTIFIED BY '123456';
+GRANT ALL PRIVILEGES ON evangadi_db.* TO 'yared'@'localhost';
+GRANT ALL PRIVILEGES ON evangadi_db.* TO 'yared'@'127.0.0.1';
+FLUSH PRIVILEGES;
+SELECT 'Setup complete!' AS Status;
