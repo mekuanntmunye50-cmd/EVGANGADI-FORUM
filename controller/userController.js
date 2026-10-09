@@ -75,7 +75,16 @@ async function login(req, res) {
       return res.status(statusCodes.BAD_REQUEST).json({
         msg: "invalid credential"});
     }
-    const token = jwt.sign({ userId: user[0].userid }, process.env.JWT_SECRET, { expiresIn: "1d" });
+
+const token = jwt.sign(
+  {
+    username: user[0].username,
+    userid: user[0].userid
+  },
+  process.env.JWT_SECRET,
+  { expiresIn: "1d" }
+);
+
     return res.status(statusCodes.OK).json({
   msg: "user login successfully",
   token
@@ -88,11 +97,19 @@ async function login(req, res) {
   }
 }
 
-// CHECK USER
+
+ // CHECK USER
 
 async function checkUser(req, res) {
-  res.send("check user");
+  console.log("Current user:", req.user);
+
+  return res.status(statusCodes.OK).json({
+    msg: "Valid user",
+    username: req.user.username,
+    userid: req.user.userid
+  });
 }
+
 
 // EXPORT FUNCTIONS
 module.exports = {

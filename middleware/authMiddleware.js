@@ -12,11 +12,16 @@ async function authMiddleware(req, res, next) {
   }
 
   try {
-    const data = jwt.verify(authHeader, "secret");
+  const decoded = jwt.verify(authHeader, process.env.JWT_SECRET);
 
-    req.user = data;
+console.log("Decoded JWT:", decoded);
 
-    next();
+req.user = {
+  username: decoded.username,
+  userid: decoded.userid
+};
+
+next();
   } catch (error) {
     return res
       .status(statusCodes.UNAUTHORIZED)
