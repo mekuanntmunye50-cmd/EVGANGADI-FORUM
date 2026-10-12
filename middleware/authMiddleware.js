@@ -5,21 +5,27 @@ const statusCodes = require("../constants/statusCodes");
 async function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
 
-  if (!authHeader) {
+  if (!authHeader || !authHeader.startswith('bearer')) {
     return res
       .status(StatusCodes.UNAUTHORIZED)
       .json({ msg: "Authentication invalid" });
   }
+  const token =authHeader.split(' ')[1]
+  console.log(authHeader)
+  console .log(token)
 
   try {
-  const decoded = jwt.verify(authHeader, process.env.JWT_SECRET);
+    const {username,userid} =jwt.verify(token,"secret")
+    req.user ={username,userid}
+    
+//   const decoded = jwt.verify(authHeader, process.env.JWT_SECRET);
 
-console.log("Decoded JWT:", decoded);
+// console.log("Decoded JWT:", decoded);
 
-req.user = {
-  username: decoded.username,
-  userid: decoded.userid
-};
+// req.user = {
+//   username: decoded.username,
+//   userid: decoded.userid
+// };
 
 next();
   } catch (error) {
