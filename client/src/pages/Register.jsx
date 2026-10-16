@@ -43,15 +43,13 @@ function Register() {
     }
 
     // Prepare the data for the backend
-   
-const userData = {
-  username,
-  firstname: firstName,
-  lastname: lastName,
-  email,
-  PASSWORD: password,
-};
-
+    const userData = {
+      username,
+      firstName,
+      lastName,
+      email,
+      password,
+    };
 
     try {
       setLoading(true);
