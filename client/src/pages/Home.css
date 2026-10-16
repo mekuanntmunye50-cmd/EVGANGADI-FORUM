@@ -1,0 +1,550 @@
+
+/* ========================================
+   1. Global styles
+======================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #ffffff;
+  color: #202124;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.home-page {
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+/* ========================================
+   2. Header / Navigation
+======================================== */
+
+.home-header {
+  min-height: 84px;
+  padding: 16px 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #eeeeee;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+}
+
+.home-logo {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  color: #222222;
+  white-space: nowrap;
+}
+
+.home-logo::first-letter {
+  color: #f58220;
+}
+
+.home-navigation {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.home-navigation a {
+  font-size: 14px;
+  font-weight: 500;
+  color: #30343b;
+  transition: color 0.2s ease;
+}
+
+.home-navigation a:hover {
+  color: #5368ee;
+}
+
+.home-navigation button {
+  min-width: 150px;
+  padding: 13px 22px;
+  border: none;
+  border-radius: 4px;
+  background: #5368ed;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.home-navigation button:hover {
+  background: #4054d8;
+}
+
+/* ========================================
+   3. Welcome section
+======================================== */
+
+.home-welcome {
+  max-width: 1220px;
+  margin: 38px auto 24px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.home-welcome h1 {
+  margin: 0 0 10px;
+  color: #252a35;
+  font-size: 28px;
+  line-height: 1.3;
+}
+
+.home-welcome p {
+  margin: 0;
+  color: #6d727c;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.home-welcome button {
+  flex-shrink: 0;
+  min-width: 185px;
+  padding: 13px 24px;
+  border: none;
+  border-radius: 4px;
+  background: #5368ed;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.home-welcome button:hover {
+  background: #4054d8;
+}
+
+/* ========================================
+   4. Ask question form
+======================================== */
+
+.ask-question-section {
+  max-width: 1220px;
+  margin: 20px auto 36px;
+  padding: 25px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.ask-question-section h2 {
+  margin: 0 0 22px;
+  font-size: 23px;
+  color: #252a35;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #414651;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 5px;
+  background: #ffffff;
+  color: #252a35;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #5368ed;
+  box-shadow: 0 0 0 3px rgba(83, 104, 237, 0.12);
+}
+
+.form-group textarea {
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.ask-question-section form > button,
+.post-answer-section form > button {
+  min-width: 150px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  background: #5368ed;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.ask-question-section form > button:hover,
+.post-answer-section form > button:hover {
+  background: #4054d8;
+}
+
+button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ========================================
+   5. Community questions
+======================================== */
+
+.questions-section {
+  max-width: 1220px;
+  margin: 25px auto 60px;
+  padding: 0 24px;
+}
+
+.questions-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #dddddd;
+}
+
+.questions-heading h2 {
+  margin: 0;
+  font-size: 25px;
+  font-weight: 600;
+  color: #252a35;
+}
+
+.questions-heading button {
+  padding: 9px 16px;
+  border: 1px solid #d6d9e0;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #343945;
+  cursor: pointer;
+}
+
+.questions-heading button:hover {
+  background: #f4f6ff;
+}
+
+/* Search */
+
+.search-container {
+  margin: 0 0 20px;
+}
+
+.search-container label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #414651;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 13px 15px;
+  border: 1px solid #d6d9e0;
+  border-radius: 5px;
+  outline: none;
+}
+
+.search-container input:focus {
+  border-color: #5368ed;
+  box-shadow: 0 0 0 3px rgba(83, 104, 237, 0.1);
+}
+
+/* Individual question */
+
+.questions-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.question-card {
+  padding: 23px 10px;
+  border-bottom: 1px solid #d5d5d5;
+  background: #ffffff;
+  transition: background 0.2s ease;
+}
+
+.question-card:hover {
+  background: #fcfcfd;
+}
+
+.question-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.question-author strong {
+  color: #272b34;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.question-author small {
+  margin-left: auto;
+  color: #858995;
+  font-size: 12px;
+}
+
+.question-card h3 {
+  margin: 8px 0 12px;
+  color: #242833;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.question-card > p {
+  margin: 0 0 15px;
+  color: #5d626d;
+  font-size: 14px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+/* Buttons inside question cards */
+
+.question-card > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 15px;
+  border: 1px solid #5368ed;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #5368ed;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.question-card > button:hover {
+  background: #5368ed;
+  color: #ffffff;
+}
+
+/* ========================================
+   6. Answers
+======================================== */
+
+.answers-section {
+  margin-top: 22px;
+  padding: 22px;
+  border-left: 3px solid #5368ed;
+  border-radius: 0 6px 6px 0;
+  background: #f8f9fc;
+}
+
+.answers-section > h4,
+.post-answer-section h4 {
+  margin: 0 0 16px;
+  color: #292e39;
+  font-size: 18px;
+}
+
+.answer-card {
+  margin-bottom: 13px;
+  padding: 17px;
+  border: 1px solid #e2e5eb;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.answer-card p {
+  margin: 0 0 12px;
+  color: #3f444f;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.answer-card small {
+  display: inline-block;
+  margin-right: 5px;
+  color: #777d89;
+  font-size: 12px;
+}
+
+/* Post answer form */
+
+.post-answer-section {
+  margin-top: 25px;
+  padding-top: 22px;
+  border-top: 1px solid #e0e3e9;
+}
+
+.post-answer-section a {
+  color: #5368ed;
+  text-decoration: underline;
+}
+
+.success-message {
+  margin-top: 12px;
+  color: #168044;
+  font-size: 14px;
+}
+
+.error-message {
+  margin: 15px auto;
+  padding: 12px 15px;
+  border: 1px solid #f1b9b9;
+  border-radius: 5px;
+  background: #fff1f1;
+  color: #b42318;
+  font-size: 14px;
+}
+
+.error-message p {
+  margin: 0 0 8px;
+}
+
+/* ========================================
+   7. Empty and loading states
+======================================== */
+
+.questions-section > p {
+  color: #6d727c;
+  line-height: 1.6;
+}
+
+/* ========================================
+   8. Responsive design
+======================================== */
+
+@media (max-width: 768px) {
+  .home-header {
+    padding: 15px 20px;
+    flex-wrap: wrap;
+  }
+
+  .home-logo {
+    font-size: 25px;
+  }
+
+  .home-navigation {
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+
+  .home-navigation button {
+    min-width: auto;
+    padding: 10px 15px;
+  }
+
+  .home-welcome {
+    margin: 22px auto;
+    padding: 15px 20px;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .home-welcome h1 {
+    font-size: 24px;
+  }
+
+  .ask-question-section {
+    margin: 20px;
+    padding: 20px;
+  }
+
+  .questions-section {
+    padding: 0 20px;
+  }
+
+  .questions-heading h2 {
+    font-size: 21px;
+  }
+
+  .question-card {
+    padding: 20px 4px;
+  }
+
+  .answers-section {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .home-navigation {
+    width: 100%;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .home-navigation a {
+    font-size: 13px;
+  }
+
+  .home-navigation button {
+    font-size: 13px;
+  }
+
+  .home-welcome h1 {
+    font-size: 22px;
+  }
+
+  .questions-heading {
+    align-items: flex-start;
+  }
+
+  .questions-heading h2 {
+    font-size: 19px;
+  }
+
+  .question-card h3 {
+    font-size: 16px;
+  }
+
+  .question-author {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .question-author small {
+    margin-left: 0;
+  }
+
+  .answers-section {
+    padding: 12px;
+  }
+}
