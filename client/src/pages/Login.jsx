@@ -1,142 +1,59 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import axios from "./axiosConfig";
+import AuthLayout from "../components/AuthLayout";
+import PasswordInput from "../components/PasswordInput";
+import { getToken, setToken } from "../utils/auth";
 
 function Login() {
   const navigate = useNavigate();
-
-  // Form data
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  // Loading and messages
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+
+  if (getToken()) return <Navigate to="/home" replace />;
 
   async function handleSubmit(e) {
     e.preventDefault();
-
     setError("");
-    setSuccess("");
-
-    // Frontend validation
     if (!email.trim() || !password) {
       setError("Please enter your email and password.");
       return;
     }
-
     try {
       setLoading(true);
-
-      // Connect to the Express backend
-      const response = await axios.post(
-        "http://localhost:5500/api/users/login",
-        {
-          email: email.trim(),
-          PASSWORD: password,
-        }
-      );
-
-      // Save the JWT token returned by the backend
-      const token = response.data.token;
-
-      if (!token) {
+      const { data } = await axios.post("/users/login", { email: email.trim(), PASSWORD: password });
+      if (!data.token) {
         setError("Login failed: the server did not return a token.");
         return;
       }
-
-      localStorage.setItem("token", token);
-
-      setSuccess(
-        response.data.msg || "Login successful!"
-      );
-
-      // Navigate to the home page
-      navigate("/");
-
+      setToken(data.token);
+      navigate("/home");
     } catch (err) {
-      if (err.response) {
-        setError(
-          err.response.data.msg ||
-          err.response.data.message ||
-          "Login failed. Please check your credentials."
-        );
-      } else if (err.request) {
-        setError(
-          "Cannot connect to the server. Please check your connection."
-        );
-      } else {
-        setError("An unexpected error occurred.");
-      }
-
-      console.error("Login error:", err.message);
-
+      if (err.response) setError(err.response.data.msg || err.response.data.message || "Login failed.");
+      else setError("Cannot connect to the server. Please try again.");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <section className="login-page">
-      <div className="login-container">
-        <h2>Welcome Back to Evangadi Forum</h2>
-
-        <p>Log in to continue your learning journey.</p>
-
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-
-            <input
-              id="email"
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-
-            <input
-              id="password"
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-              required
-            />
-          </div>
-
-          {error && (
-            <p className="error-message" role="alert">
-              {error}
-            </p>
-          )}
-
-          {success && (
-            <p className="success-message" role="status">
-              {success}
-            </p>
-          )}
-
-          <button type="submit" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
-
-        <p className="register-link">
-          Don't have an account?{" "}
-          <Link to="/register">Register here</Link>
+    <AuthLayout>
+      <form className="auth-form login-form" onSubmit={handleSubmit}>
+        <h2>Login to your account</h2>
+        <p className="auth-sub">
+          Don't have an account?<Link to="/register">Create a new account</Link>
         </p>
-      </div>
-    </section>
+        <input type="email" placeholder="Your Email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
+        <PasswordInput id="password" placeholder="Your Password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" />
+        {error && <p className="error-message" role="alert">{error}</p>}
+        <button type="submit" className="btn btn-orange submit-btn" disabled={loading}>
+          {loading ? "Logging in..." : "submit"}
+        </button>
+        <Link to="/register" className="text-link">Create an account?</Link>
+      </form>
+    </AuthLayout>
   );
 }
-
 export default Login;

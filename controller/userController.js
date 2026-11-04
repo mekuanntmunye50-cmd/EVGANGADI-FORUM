@@ -20,15 +20,15 @@ async function register(req, res) {
     });
   }
   try {
-    const [user] =await dbconnection.query("select username,userid from users where username = ?",[username])
+    const [user] =await dbconnection.query("select username,userid from users where username = ? or email = ?",[username, email])
    if (user.length >0){
     return res.status(statusCodes.BAD_REQUEST).json({
-      msg: "user already registered"
+      msg: "Username or email already registered"
     })
    }
-   if(PASSWORD.length<6){
+   if(PASSWORD.length<8){
     return res.status(statusCodes.BAD_REQUEST).json({
-      msg: "Password must be at least 6 characters long!"
+      msg: "Password must be at least 8 characters long!"
     })
    }
    //encription password
@@ -101,8 +101,6 @@ const token = jwt.sign(
  // CHECK USER
 
 async function checkUser(req, res) {
-  console.log("Current user:", req.user);
-
   return res.status(statusCodes.OK).json({
     msg: "Valid user",
     username: req.user.username,
