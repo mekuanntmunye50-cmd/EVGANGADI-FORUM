@@ -1,189 +1,74 @@
-import React, { useRef, useState } from "react";
-import axios from "axios";
-// React — the library used to build your user interface.
-// useRef — lets you access the actual input elements and read their current values.
-// useState — lets React remember information that changes, such as loading, errors, and success messages.
-// axios — a library that sends HTTP requests between your frontend and backend.
-function Register() {
-  // References to the input fields
-  const userNameDom = useRef(null);
-  const firstNameDom = useRef(null);
-  const lastNameDom = useRef(null);
-  const emailDom = useRef(null);
-  const passwordDom = useRef(null);
-  const confirmPasswordDom = useRef(null);
+import { useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import axios from "./axiosConfig";
+import AuthLayout from "../components/AuthLayout";
+import PasswordInput from "../components/PasswordInput";
+import { getToken } from "../utils/auth";
 
-  // State for loading, success, and error messages
+function Register() {
+  const navigate = useNavigate();
+  const [form, setForm] = useState({ email: "", firstname: "", lastname: "", username: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  if (getToken()) return <Navigate to="/home" replace />;
+
+  const set = (k) => (e) => setForm({ ...form, [k]: e.target.value });
+
   async function handleSubmit(e) {
     e.preventDefault();
-
     setError("");
     setSuccess("");
-
-    const username = userNameDom.current.value.trim();
-    const firstName = firstNameDom.current.value.trim();
-    const lastName = lastNameDom.current.value.trim();
-    const email = emailDom.current.value.trim();
-    const password = passwordDom.current.value;
-    const confirmPassword = confirmPasswordDom.current.value;
-
-    // Validate passwords
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-
-    if (password.length < 8) {
+    if (form.password.length < 8) {
       setError("Password must contain at least 8 characters.");
       return;
     }
-
-    // Prepare the data for the backend
-    const userData = {
-      username,
-      firstName,
-      lastName,
-      email,
-      password,
-    };
-
     try {
       setLoading(true);
-
-      // Send registration data to your Express backend
-      const response = await axios.post(
-        "http://localhost:5500/api/users/register",
-        userData
-      );
-
-      setSuccess(
-        response.data.message || "Registration successful!"
-      );
-
-      // Clear the form after successful registration
-      userNameDom.current.value = "";
-      firstNameDom.current.value = "";
-      lastNameDom.current.value = "";
-      emailDom.current.value = "";
-      passwordDom.current.value = "";
-      confirmPasswordDom.current.value = "";
+      const { data } = await axios.post("/users/register", {
+        username: form.username.trim(),
+        firstname: form.firstname.trim(),
+        lastname: form.lastname.trim(),
+        email: form.email.trim(),
+        PASSWORD: form.password,
+      });
+      setSuccess(data.msg || "Registered successfully! Redirecting to login...");
+      setTimeout(() => navigate("/"), 1200);
     } catch (err) {
-      if (err.response) {
-        setError(
-          err.response.data.message ||
-            err.response.data.msg ||
-            "Registration failed. Please check your information."
-        );
-      } else if (err.request) {
-        setError(
-          "Cannot connect to the server. Check that your backend is running."
-        );
-      } else {
-        setError("An unexpected error occurred.");
-      }
-
-      console.error("Registration error:", err.message);
+      if (err.response) setError(err.response.data.msg || err.response.data.message || "Registration failed.");
+      else setError("Cannot connect to the server. Please try again.");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <section className="register-page">
-      <div className="register-container">
-        <h2>Create Your Evangadi Forum Account</h2>
-
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="username">Username</label>
-            <input
-              id="username"
-              type="text"
-              placeholder="Enter username"
-              ref={userNameDom}
-              autoComplete="username"
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="firstName">First Name</label>
-            <input
-              id="firstName"
-              type="text"
-              placeholder="Enter first name"
-              ref={firstNameDom}
-              autoComplete="given-name"
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="lastName">Last Name</label>
-            <input
-              id="lastName"
-              type="text"
-              placeholder="Enter last name"
-              ref={lastNameDom}
-              autoComplete="family-name"
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              type="email"
-              placeholder="Enter email address"
-              ref={emailDom}
-              autoComplete="email"
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              placeholder="Create password"
-              ref={passwordDom}
-              autoComplete="new-password"
-              minLength={8}
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="confirmPassword">
-              Confirm Password
-            </label>
-            <input
-              id="confirmPassword"
-              type="password"
-              placeholder="Confirm password"
-              ref={confirmPasswordDom}
-              autoComplete="new-password"
-              required
-            />
-          </div>
-
-          {error && <p role="alert">{error}</p>}
-
-          {success && <p role="status">{success}</p>}
-
-          <button type="submit" disabled={loading}>
-            {loading ? "Registering..." : "Register"}
-          </button>
-        </form>
-      </div>
-    </section>
+    <AuthLayout>
+      <form className="auth-form" onSubmit={handleSubmit}>
+        <h2>Join the network</h2>
+        <p className="auth-sub">
+          Already have an account? <Link to="/">Sign in</Link>
+        </p>
+        <input type="email" placeholder="Email" value={form.email} onChange={set("email")} autoComplete="email" required />
+        <div className="name-row">
+          <input type="text" placeholder="First Name" value={form.firstname} onChange={set("firstname")} autoComplete="given-name" required />
+          <input type="text" placeholder="Last Name" value={form.lastname} onChange={set("lastname")} autoComplete="family-name" required />
+        </div>
+        <input type="text" placeholder="User Name" value={form.username} onChange={set("username")} autoComplete="username" required />
+        <PasswordInput id="password" placeholder="Password" value={form.password} onChange={set("password")} autoComplete="new-password" />
+        {error && <p className="error-message" role="alert">{error}</p>}
+        {success && <p className="success-message" role="status">{success}</p>}
+        <button type="submit" className="btn btn-blue join-btn" disabled={loading}>
+          {loading ? "Joining..." : "Agree and Join"}
+        </button>
+        <p className="agree">
+          I agree to the <a href="/" onClick={(e) => e.preventDefault()}>privacy policy</a> and{" "}
+          <a href="/" onClick={(e) => e.preventDefault()}>terms of serivice.</a>
+        </p>
+        <Link to="/" className="text-link">Already have an account?</Link>
+      </form>
+    </AuthLayout>
   );
 }
-
 export default Register;
